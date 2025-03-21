@@ -24,16 +24,48 @@ var/
 # Virtual Environment
 venv/
 ENV/
+.thesisenv/
 
 # Data
 data/*.txt
 data/*.csv
+nasa_data/*.txt  # NASA CMAPSS data files
+output/*.csv
+output/*.json
+
+# Model Files
+*.h5
+*.pt
+*.pth
+*.onnx
 
 # Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
 
 # IDE files
 .idea/
 .vscode/
 *.swp
 *.swo
+
+# Mac OS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+tmp/
+temp/
+
+# Configuration
+config/local_*.yaml
+.env
+
+# Specific project folders to exclude
+# Remove or comment out if you want to include these
+p/
