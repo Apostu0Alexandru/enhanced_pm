@@ -1,0 +1,27 @@
+# Core ML
+tensorflow==2.15.0
+tensorflow-addons==0.23.0
+#tflite-runtime==2.15.0  # For Raspberry Pi deployment
+
+# Data Processing
+pandas==2.1.4
+numpy==1.26.4
+scipy==1.12.0
+scikit-learn==1.4.0
+tsaug
+
+# System Integration
+gpiozero==2.0
+pyserial==3.5
+#python-rtlsdr==0.2.91
+
+# Visualization
+matplotlib==3.8.2
+plotly==5.18.0
+seaborn==0.13.2
+
+# Dev Tools
+jupyterlab==4.0.11
+pytest==8.0.0
+black==24.1.1
+flake8==6.1.0

@@ -1,0 +1,7 @@
+data_path: nasa_data/train_FD001.txt
+synthetic_ratio: 0.3
+epochs: 150
+batch_size: 64
+validation:
+  phm_threshold: 50
+  metrics: [RMSE, MAE, PHM]
