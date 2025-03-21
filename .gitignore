@@ -38,6 +38,7 @@ output/*.json
 *.pt
 *.pth
 *.onnx
+*.txt
 
 # Jupyter Notebook
 .ipynb_checkpoints
