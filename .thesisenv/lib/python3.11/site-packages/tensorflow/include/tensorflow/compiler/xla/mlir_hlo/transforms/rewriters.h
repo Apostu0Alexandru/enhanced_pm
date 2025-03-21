@@ -1,4 +1,4 @@
-/* Copyright 2021 The OpenXLA Authors.
+/* Copyright 2021 The TensorFlow Authors. All Rights Reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +28,11 @@ class RewritePatternSet;
 /// Collects a set of patterns that bufferize operations from the standard and
 /// other dialects.
 void populateExtraBufferizePatterns(
+    MLIRContext *context, bufferization::BufferizeTypeConverter *converter,
+    RewritePatternSet *patterns);
+
+/// Populate pattern to bufferize `linalg.tiled_loop`.
+void populateTiledLoopBufferizePattern(
     MLIRContext *context, bufferization::BufferizeTypeConverter *converter,
     RewritePatternSet *patterns);
 

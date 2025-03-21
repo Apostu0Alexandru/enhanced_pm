@@ -62,7 +62,6 @@
 
 #include "../../internal.h"
 #include "../digest/md32_common.h"
-#include "../service_indicator/internal.h"
 #include "internal.h"
 
 
@@ -109,7 +108,6 @@ int SHA1_Final(uint8_t out[SHA_DIGEST_LENGTH], SHA_CTX *c) {
   CRYPTO_store_u32_be(out + 8, c->h[2]);
   CRYPTO_store_u32_be(out + 12, c->h[3]);
   CRYPTO_store_u32_be(out + 16, c->h[4]);
-  FIPS_service_indicator_update_state();
   return 1;
 }
 

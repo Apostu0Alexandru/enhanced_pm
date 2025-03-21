@@ -4,12 +4,14 @@ May 2007
 """
 from numpy.testing import assert_
 import pytest
+from functools import partial
 
 from scipy.optimize import _nonlin as nonlin, root
 from scipy.sparse import csr_array
 from numpy import diag, dot
 from numpy.linalg import inv
 import numpy as np
+import scipy
 
 from .test_minpack import pressure_network
 
@@ -208,6 +210,13 @@ class TestNonlin:
                     continue
                 self._check_root(f, meth)
 
+    def test_no_convergence(self):
+        def wont_converge(x):
+            return 1e3 + x
+
+        with pytest.raises(scipy.optimize.NoConvergence):
+            nonlin.newton_krylov(wont_converge, xin=[0], maxiter=1)
+
 
 class TestSecant:
     """Check that some Jacobian approximations satisfy the secant condition"""
@@ -359,18 +368,18 @@ class TestJacobianDotSolve:
     Check that solve/dot methods in Jacobian approximations are consistent
     """
 
-    def _func(self, x):
-        return x**2 - 1 + np.dot(self.A, x)
+    def _func(self, x, A=None):
+        return x**2 - 1 + np.dot(A, x)
 
     def _check_dot(self, jac_cls, complex=False, tol=1e-6, **kw):
-        np.random.seed(123)
+        rng = np.random.RandomState(123)
 
         N = 7
 
         def rand(*a):
-            q = np.random.rand(*a)
+            q = rng.rand(*a)
             if complex:
-                q = q + 1j*np.random.rand(*a)
+                q = q + 1j*rng.rand(*a)
             return q
 
         def assert_close(a, b, msg):
@@ -379,12 +388,12 @@ class TestJacobianDotSolve:
             if d > f:
                 raise AssertionError(f'{msg}: err {d:g}')
 
-        self.A = rand(N, N)
+        A = rand(N, N)
 
         # initialize
-        x0 = np.random.rand(N)
+        x0 = rng.rand(N)
         jac = jac_cls(**kw)
-        jac.setup(x0, self._func(x0), self._func)
+        jac.setup(x0, self._func(x0, A), partial(self._func, A=A))
 
         # check consistency
         for k in range(2*N):
@@ -420,7 +429,7 @@ class TestJacobianDotSolve:
                 assert_close(Jv, Jv2, 'rmatvec vs rsolve')
 
             x = rand(N)
-            jac.update(x, self._func(x))
+            jac.update(x, self._func(x, A))
 
     def test_broyden1(self):
         self._check_dot(nonlin.BroydenFirst, complex=False)
@@ -446,6 +455,7 @@ class TestJacobianDotSolve:
         self._check_dot(nonlin.ExcitingMixing, complex=False)
         self._check_dot(nonlin.ExcitingMixing, complex=True)
 
+    @pytest.mark.thread_unsafe
     def test_krylov(self):
         self._check_dot(nonlin.KrylovJacobian, complex=False, tol=1e-3)
         self._check_dot(nonlin.KrylovJacobian, complex=True, tol=1e-3)
