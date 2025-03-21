@@ -1,0 +1,10 @@
+feature_engineering:
+  multi_condition:
+    cluster_params:
+      n_clusters: 6
+    window_sizes:
+      vibration_rms: 5
+      temperature_ewma_span: 5
+  single_condition:
+    sequence_length: 100
+    prediction_horizon: 1
